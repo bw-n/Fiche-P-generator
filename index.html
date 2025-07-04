@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Générateur de fiche premium</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #181818;
+      color: #fff;
+      padding: 2em;
+    }
+    select, textarea, button {
+      width: 100%;
+      margin: 1em 0;
+      padding: 0.6em;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+    h1, h2 {
+      color: #00e6ff;
+    }
+    .output {
+      background: #111;
+      padding: 1em;
+      border: 1px solid #00e6ff;
+      border-radius: 10px;
+      margin-bottom: 2em;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛠️ Générateur de fiche premium</h1>
+  <label for="memberSelect">Choisir un membre :</label>
+  <select id="memberSelect"></select>
+
+  <h2>Bloc #1 : Infos Premium</h2>
+  <div class="output" id="infosOutput"></div>
+  <button onclick="copyCode('infosOutput')">📋 Copier ce bloc</button>
+
+  <h2>Bloc #2 : Portfolio / Vidéo / Témoignage</h2>
+  <div class="output" id="portfolioOutput"></div>
+  <button onclick="copyCode('portfolioOutput')">📋 Copier ce bloc</button>
+
+  <script>
+  window.onload = () => {
+    const data = [
+      {
+        id: "blaze",
+        nom: "Blaze Aurélien",
+        pseudo: "Blaze",
+        age: 32,
+        entites: ["Freelance", "Collectif DAO"],
+        localisation: "Paris, France",
+        professions: ["Smart Contract Dev", "Security Audit", "Infrastructure"],
+        formation: {
+          diplome: "MSc Cybersecurity, ETH Zürich",
+          certifications: ["Certified Web3 Auditor", "Solidity Pro", "CEH"],
+          formateurs: ["ETHGlobal", "0xHack", "OpenZeppelin courses"]
+        },
+        expertise: [
+          "Audit smart contracts DeFi, protocoles Layer 2, optimisation gas et pratiques de sécurité critiques.",
+          "Expérimenté sur codebases Aragon, OpenZeppelin, Gnosis Safe, etc.",
+          "Déploiement mainnet, rapports techniques, et vulgarisation pour fondateurs non-tech."
+        ],
+        site: "https://www.exemplebw.com",
+        image: "https://www.weebly.com/editor/uploads/9/7/1/8/9718598/custom_themes/990953050610449310/files/logo_BW_WEB_200x200.jpg",
+        portfolio: [
+          {
+            image: "https://www.weebly.com/editor/uploads/9/7/1/8/9718598/custom_themes/990953050610449310/files/logo_BW_WEB_200x200.jpg",
+            desc: "Intégration Smart Contract — DEX Layer 2"
+          },
+          {
+            image: "https://www.weebly.com/editor/uploads/9/7/1/8/9718598/custom_themes/990953050610449310/files/logo_BW_WEB_200x200.jpg",
+            desc: "Audit Sécurité — DAO Governance"
+          },
+          {
+            image: "https://www.weebly.com/editor/uploads/9/7/1/8/9718598/custom_themes/990953050610449310/files/logo_BW_WEB_200x200.jpg",
+            desc: "Déploiement Infra + DevOps web3"
+          }
+        ],
+        video: "https://www.youtube.com/embed/XXXXXXXX",
+        temoignage: {
+          quote: "Blaze a délivré un audit complet et accessible.",
+          auteur: "Équipe GravityPool"
+        },
+        socials: {
+          twitter: "https://twitter.com/blazedev",
+          linkedin: "https://linkedin.com/in/blazeweb3"
+        }
+      }
+    ];
+    const infosDiv = document.getElementById('infosOutput');
+    const portDiv = document.getElementById('portfolioOutput');
+
+    function render(i) {
+      const m = data[i];
+      const entites = m.entites.join(" + ");
+      const profs = m.professions.map(tag =>
+        `<span style="display:inline-block; background:#00e6ff; color:#121212; border-radius:20px; padding:6px 14px; margin:6px 6px 0 0; font-size:14px; font-weight:bold;">#${tag}</span>`
+      ).join("");
+      const certs = m.formation.certifications.join(", ");
+      const forms = m.formation.formateurs.join(", ");
+
+      const infosHTML = `
+<div style="background:#181818; color:#fff; padding:30px; border-radius:14px; border:1px solid #00e6ff; font-family: 'Open Sans', sans-serif; max-width: 980px; margin:40px auto; line-height: 1.7;">
+  <div style="display:flex; flex-wrap:wrap; gap:30px;">
+    <div style="flex:0 0 180px;">
+      <div style="width:180px; height:180px; background:#101010 url('${m.image}') center/cover; border-radius:12px;"></div>
+    </div>
+    <div style="flex:1;">
+      <h2 style="font-size:26px; font-family:'Montserrat',sans-serif; color:#00e6ff;">${m.nom}</h2>
+      <p><strong>Surnom :</strong> ${m.pseudo}</p>
+      <p><strong>Âge :</strong> ${m.age} ans</p>
+      <p><strong>Entité(s) :</strong> ${entites}</p>
+      <p><strong>Localisation :</strong> ${m.localisation}</p>
+    </div>
+  </div>
+  <div style="margin-top:20px;"><strong style="color:#00e6ff;">PROFESSION(S)</strong><br>${profs}</div>
+  <div style="margin-top:20px;">
+    <strong style="color:#00e6ff;">FORMATION</strong>
+    <ul style="margin-left:20px;">
+      <li><strong>Diplôme :</strong> ${m.formation.diplome}</li>
+      <li><strong>Certifications :</strong> ${certs}</li>
+      <li><strong>Formations :</strong> ${forms}</li>
+    </ul>
+  </div>
+  <div style="margin-top:20px;">
+    <strong style="color:#00e6ff;">NIVEAUX D'EXPERTISE</strong>
+    <div style="margin-top:10px; background:#111; padding:18px; border-left:4px solid #00e6ff; border-radius:8px;">
+      ${m.expertise.map(p => `<p>${p}</p>`).join("")}
+    </div>
+  </div>
+  <div style="margin-top:20px;">
+    <strong style="color:#00e6ff;">WEBSITE</strong><br>
+    <p>${m.site}</p>
+  </div>
+</div>`.trim();
+
+      const portfolioHTML = `
+<div style="background:#181818; color:#fff; padding:30px; border-radius:14px; border:1px solid #00e6ff; font-family: 'Open Sans', sans-serif; max-width: 980px; margin:40px auto;">
+  <h3 style="color:#00e6ff; font-family:'Montserrat',sans-serif; font-size:20px;">PORTOFOLIO</h3>
+  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+    ${m.portfolio.map(p => `
+      <div style="background:#121212; border-radius:10px; padding:10px; text-align:center;">
+        <img src="${p.image}" style="width:100%; border-radius:8px;" alt="Image projet">
+        <p style="margin-top:10px;">${p.desc}</p>
+      </div>
+    `).join("")}
+  </div>
+  <h3 style="color:#00e6ff; font-family:'Montserrat',sans-serif; margin-top:30px;">VIDÉO DE DÉMO</h3>
+  <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:10px; margin-bottom:20px;">
+    <iframe src="${m.video}" frameborder="0" allowfullscreen style="position:absolute; top:0; left:0; width:100%; height:100%; border-radius:10px;"></iframe>
+  </div>
+  <h3 style="color:#00e6ff; font-family:'Montserrat',sans-serif;">TÉMOIGNAGE</h3>
+  <div style="background:#111; border-left:4px solid #00e6ff; padding:18px 24px; border-radius:8px;">
+    <p style="font-style:italic;">“${m.temoignage.quote}”</p>
+    <p style="text-align:right; color:#00e6ff;"><strong>— ${m.temoignage.auteur}</strong></p>
+  </div>
+</div>`.trim();
+
+      infosDiv.textContent = infosHTML;
+      portDiv.textContent = portfolioHTML;
+    }
+
+    function copyCode(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.textContent).then(() => {
+        alert("✔️ Code copié !");
+      });
+    }
+
+    // Initialisation
+    render(0);
+  };
+  </script>
+</body>
+</html>

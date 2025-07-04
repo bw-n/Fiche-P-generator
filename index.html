@@ -177,5 +177,22 @@
     render(0);
   };
   </script>
+  <script>
+  window.addEventListener('message', function (event) {
+    if (event.data.type === 'setHeight') {
+      const iframe = document.querySelector('iframe[src*="bw-n.github.io"]');
+      if (iframe) {
+        iframe.style.height = event.data.height + 'px';
+      }
+    }
+  });
+</script>
+
+<script>
+  window.addEventListener('load', () => {
+    const frame = document.querySelector('iframe[src*="bw-n.github.io"]');
+    if (frame) frame.style.marginTop = '0px';
+  });
+</script>
 </body>
 </html>
